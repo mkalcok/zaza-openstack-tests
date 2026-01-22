@@ -15,6 +15,7 @@
 """Encapsulate OVN testing."""
 
 import logging
+import os
 import unittest
 
 import juju
@@ -229,6 +230,10 @@ class BaseCharmOperationTest(test_utils.BaseCharmTest):
 
     def test_prometheus_exporter_reachable(self):
         """Ensure that the OVS/OVN exporter responds to requests."""
+        if os.environ.get('TEST_SKIP_PROMETHEUS') is not None:
+            self.skipTest('Prometheus testing skipped becuase '
+                          'TEST_SKIP_PROMETHEUS env is set.')
+
         for unit in zaza.model.get_units(self.application_name):
             ip = zaza.model.get_unit_public_address(unit)
             response = requests.get(
