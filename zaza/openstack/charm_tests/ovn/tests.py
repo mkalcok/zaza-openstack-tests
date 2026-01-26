@@ -362,6 +362,10 @@ class ChassisCharmOperationTest(BaseCharmOperationTest):
 
     def test_enable_hardware_offload(self):
         """Confirm that chassis can configure OVS hardware offload."""
+        if os.environ.get('TEST_SKIP_HW_OFFLOAD') is not None:
+            self.skipTest('Hardware Offload testing skipped becuase '
+                          'TEST_SKIP_HW_OFFLOAD env is set.')
+
         with self.config_change(
                 {'enable-hardware-offload': 'false'},
                 {'enable-hardware-offload': 'true'}):
